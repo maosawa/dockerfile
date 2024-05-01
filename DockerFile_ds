@@ -7,11 +7,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Pythonパッケージのインストール
+# Pythonパッケージのインストール、ここでtensorflow-macosとtensorflow-metalを追加
 RUN pip install --upgrade pip && \
     pip install torch torchvision scipy numpy pandas matplotlib seaborn jupyterlab scikit-learn thop albumentations opencv-python imgaug torchtext nltk gensim portalocker \
-    plotly chart_studio jupyter-dash "ipywidgets>=7.6" lightgbm xgboost graphviz catboost category_encoders hyperopt hpsklearn nibabel statsmodels openai langchain tensorflow keras && \
+    plotly chart_studio jupyter-dash "ipywidgets>=7.6" lightgbm xgboost graphviz catboost category_encoders hyperopt hpsklearn nibabel statsmodels openai langchain && \
+    pip install tensorflow-macos tensorflow-metal && \
     rm -rf ~/.cache/pip
+
 
 # 作業ディレクトリの設定
 WORKDIR /
