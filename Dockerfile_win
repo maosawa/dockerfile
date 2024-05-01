@@ -1,0 +1,27 @@
+# ベースとなるDockerイメージを指定
+FROM python:3.11.9-slim
+
+# 必要なパッケージのインストール
+RUN apt-get update && \
+    apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev sudo wget vim graphviz && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Pythonパッケージのインストール
+RUN pip install --upgrade pip && \
+    pip install torch torchvision scipy numpy pandas matplotlib seaborn jupyterlab scikit-learn thop albumentations opencv-python imgaug torchtext nltk gensim portalocker \
+    plotly chart_studio jupyter-dash "ipywidgets>=7.6" lightgbm xgboost graphviz catboost category_encoders hyperopt hpsklearn nibabel statsmodels openai langchain tensorflow keras && \
+    rm -rf ~/.cache/pip
+
+# 作業ディレクトリの設定
+WORKDIR /
+RUN mkdir /work
+
+# JupyterLabの設定ファイルを作成してダークモードとオートクロージング・ブラケットを設定
+RUN mkdir -p /root/.jupyter/lab/user-settings/@jupyterlab/apputils-extension && \
+    echo '{"theme":"JupyterLab Dark"}' > /root/.jupyter/lab/user-settings/@jupyterlab/apputils-extension/themes.jupyterlab-settings && \
+    mkdir -p /root/.jupyter/lab/user-settings/@jupyterlab/codemirror-extension && \
+    echo '{"keyMap":"sublime","autoClosingBrackets":true}' > /root/.jupyter/lab/user-settings/@jupyterlab/codemirror-extension/commands.jupyterlab-settings
+
+# JupyterLabを起動するコマンドを設定
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--allow-root", "--LabApp.token=''"]
