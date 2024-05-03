@@ -3,7 +3,7 @@ FROM python:3.11.9-slim
 
 # 必要なパッケージのインストール
 RUN apt-get update && \
-    apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev sudo wget vim graphviz && \
+    apt-get install -y libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev sudo wget vim graphviz libgomp1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
